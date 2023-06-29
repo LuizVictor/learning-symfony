@@ -1,16 +1,83 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3cd616181c.js" crossorigin="anonymous"></script>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+            color: var(--secundary-dark);
+        }
 
-        {% block javascripts %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+        :root {
+            --primary-light: #fff;
+            --secondary-light: #d4d4d4;
+            --primary-dark: #171717;
+            --secundary-dark: #343434;
+        }
+
+        .title {
+            font-weight: 500;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            margin: .9rem 0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            transition: all .3s linear;
+        }
+
+        .btn.btn-primary {
+            color: var(--primary-light);
+            background-color: var(--primary-dark);
+        }
+
+        .btn.btn-primary i {
+            margin: 0 .1rem;
+            font-size: .75rem;
+            color: var(--primary-light);
+        }
+
+        .btn.btn-primary:hover {
+            background-color: var(--secundary-dark);
+        }
+
+        .form-control label {
+            display: block;
+        }
+
+        .form-control input {
+            width: 100%;
+            border-radius: 3px;
+            border: 1px solid var(--primary-dark);
+        }
+
+        .form-control input:focus-visible {
+            outline: none;
+            border: 1px solid var(--secundary-dark);
+        }
+    </style>
+
+    {% block stylesheets %}
+    {% endblock %}
+
+    {% block javascripts %}
+    {% endblock %}
+</head>
+<body>
+<div class="container mx-auto">
+    {% block body %}{% endblock %}
+</div>
+</body>
 </html>

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    New serie
+{% endblock %}
+
+{% block body %}
+    <h1 class="title">New serie</h1>
+
+    <a href="/series" class="btn btn-primary">
+        <i class="fa-solid fa-angle-left"></i> Back
+    </a>
+
+    <form action="" method="post">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-3">
+                <div class="form-control">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary mt-4">
+            Create
+        </button>
+    </form>
+{% endblock %}
