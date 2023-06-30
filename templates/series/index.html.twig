@@ -12,7 +12,11 @@
         }
 
         .list-group li {
-            padding: 5px 10px;
+            width: 100%;
+            padding: 10px;
+            align-items: center;
+            display: inline-flex;
+            justify-content: space-between;
         }
 
         .list-group li:not(:last-child) {
@@ -24,13 +28,23 @@
 {% block body %}
     <h1 class="title">Series</h1>
 
-    <a href="/series/create" class="btn btn-primary">
+    <a href="/series/create" class="btn btn-link mb-3">
         new <i class="fa-solid fa-plus"></i>
     </a>
 
     <ul class="list-group">
         {% for series in seriesList %}
-            <li>{{ series.name }}</li>
+            <li>
+                {{ series.name }}
+                <div class="btn-group">
+                    <a href="#" class="btn btn-link">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </a>
+                    <a href="#" class="btn btn-input">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </a>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}
