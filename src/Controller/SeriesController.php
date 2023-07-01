@@ -29,19 +29,27 @@ class SeriesController extends AbstractController
         ]);
     }
 
-    #[Route('/series/create', methods: ['GET'])]
+    #[Route('/series/create', name: 'app_series_create', methods: ['GET'])]
     public function create(): Response
     {
         return $this->render('series/create.html.twig');
     }
 
-    #[Route('/series/create', methods: ['POST'])]
+    #[Route('/series/create', name: 'app_series_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
         $name = $request->request->get('name');
         $serie = new Series($name);
 
         $this->seriesRepository->save($serie, true);
+        return new RedirectResponse('/series');
+    }
+
+    #[Route('/series/destroy/{id}', name: 'app_series_destroy', methods: ['DELETE'])]
+    public function destroy(int $id): Response
+    {
+        $serie = $this->seriesRepository->findByIdPartial($id);
+        $this->seriesRepository->remove($serie, true);
         return new RedirectResponse('/series');
     }
 }

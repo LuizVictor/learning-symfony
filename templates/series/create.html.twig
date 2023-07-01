@@ -7,21 +7,17 @@
 {% block body %}
     <h1 class="title">New serie</h1>
 
-    <a href="/series" class="btn btn-link mb-3">
+    <a href="{{ path('app_series') }}" class="btn btn-link mb">
         <i class="fa-solid fa-angle-left"></i> Back
     </a>
 
-    <form action="" method="post">
-        <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <div class="sm:col-span-3">
-                <div class="form-control">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" id="name">
-                </div>
-            </div>
+    <form action="{{ path('app_series_store') }}" method="post">
+        <div class="form-control">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
         </div>
 
-        <button class="btn btn-input mt-4">
+        <button class="btn btn-input mt">
             Create
         </button>
     </form>

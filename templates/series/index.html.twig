@@ -22,13 +22,21 @@
         .list-group li:not(:last-child) {
             border-bottom: 1px solid var(--secondary-light);
         }
+
+        .btn-group {
+            display: flex;
+        }
+
+        .btn-group a {
+            margin: 0 5px;
+        }
     </style>
 {% endblock %}
 
 {% block body %}
     <h1 class="title">Series</h1>
 
-    <a href="/series/create" class="btn btn-link mb-3">
+    <a href="{{ path('app_series_create') }}" class="btn btn-link mb">
         new <i class="fa-solid fa-plus"></i>
     </a>
 
@@ -37,12 +45,13 @@
             <li>
                 {{ series.name }}
                 <div class="btn-group">
-                    <a href="#" class="btn btn-link">
-                        <i class="fa-regular fa-pen-to-square"></i>
-                    </a>
-                    <a href="#" class="btn btn-input">
-                        <i class="fa-regular fa-trash-can"></i>
-                    </a>
+                    <form action="{{ path('app_series_destroy', {id: series.id}) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+
+                        <button class="btn btn-input">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
                 </div>
             </li>
         {% endfor %}

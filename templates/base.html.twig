@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -13,6 +12,10 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
         * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-size: 1rem;
             font-family: 'Roboto', sans-serif;
             color: var(--secondary-dark);
         }
@@ -26,6 +29,21 @@
             --fourth-darl: #677E84;
         }
 
+        .container {
+            max-width: 1320px;
+            width: 100%;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .mt {
+            margin-top: 1rem;
+        }
+
+        .mb {
+            margin-bottom: 1rem;
+        }
+
         .title {
             font-weight: 500;
             font-size: 1.8rem;
@@ -33,15 +51,18 @@
         }
 
         .btn {
+            border: none;
+            cursor: pointer;
             padding: 5px 10px;
             border-radius: 5px;
             display: inline-block;
+            text-decoration: none;
             transition: all .3s linear;
         }
 
         .btn i {
             margin: 0 .1rem;
-            font-size: .75rem;
+            font-size: .8rem;
             color: var(--primary-light);
         }
 
@@ -65,6 +86,7 @@
 
         .form-control label {
             display: block;
+            margin-bottom: 5px;
         }
 
         .form-control input {
