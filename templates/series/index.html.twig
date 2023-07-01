@@ -30,11 +30,38 @@
         .btn-group a {
             margin: 0 5px;
         }
+
+        .alert {
+            padding: 10px;
+            display: block;
+            margin: 10px 0;
+            border: 1px solid;
+            border-radius: 5px;
+        }
+
+        .alert.alert-success {
+            border-color: #C4D7D1;
+            background-color: #F1FDF5;
+        }
+
+        .alert.alert-danger {
+            border-color: #D8C9CE;
+            background-color: #FBF0F0;
+        }
+
     </style>
 {% endblock %}
 
 {% block body %}
     <h1 class="title">Series</h1>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 
     <a href="{{ path('app_series_create') }}" class="btn btn-link mb">
         new <i class="fa-solid fa-plus"></i>

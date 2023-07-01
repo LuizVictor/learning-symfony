@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function mysql_xdevapi\getSession;
 
 class SeriesController extends AbstractController
 {
@@ -20,7 +21,7 @@ class SeriesController extends AbstractController
     }
 
     #[Route('/series', name: 'app_series', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $seriesList = $this->seriesRepository->findAll();
 
@@ -41,15 +42,20 @@ class SeriesController extends AbstractController
         $name = $request->request->get('name');
         $serie = new Series($name);
 
+        $session = $request->getSession();
+        $this->addFlash('success', 'Serie created with success');
+
         $this->seriesRepository->save($serie, true);
         return new RedirectResponse('/series');
     }
 
     #[Route('/series/destroy/{id}', name: 'app_series_destroy', methods: ['DELETE'])]
-    public function destroy(int $id): Response
+    public function destroy(int $id, Request $request): Response
     {
         $serie = $this->seriesRepository->findByIdPartial($id);
         $this->seriesRepository->remove($serie, true);
+        $this->addFlash('success', 'Serie removed with success');
+
         return new RedirectResponse('/series');
     }
 }
