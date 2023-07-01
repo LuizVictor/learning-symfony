@@ -6,19 +6,20 @@
 
 {% block stylesheets %}
     <style>
-        .form-control label {
+        form label {
             display: block;
             margin-bottom: 5px;
         }
 
-        .form-control input {
+        form input {
             width: 100%;
             padding: 8px 5px;
             border-radius: 5px;
+            margin-bottom: 1rem;
             border: 1px solid var(--primary-dark);
         }
 
-        .form-control input:focus-visible {
+        form input:focus-visible {
             outline: none;
             border: 1px solid var(--thirdy-dark);
         }
@@ -28,11 +29,15 @@
 {% block body %}
     <h1 class="title">{{ title }}</h1>
 
+
     <a href="{{ path('app_series') }}" class="btn btn-link mb">
         <i class="fa-solid fa-angle-left"></i> Back
     </a>
 
-    <form action="{{ serie is defined ? path('app_series_update', {serie: serie.id}) : path('app_series_store') }}"
+    {{ form(form) }}
+
+
+    {#<form action="{{ serie is defined ? path('app_series_update', {serie: serie.id}) : path('app_series_store') }}"
           method="post">
         {% if serie is defined %}
             <input type="hidden" name="_method" value="PUT">
@@ -46,5 +51,5 @@
         <button class="btn btn-input mt">
             {{ btn_text }}
         </button>
-    </form>
+    </form>#}
 {% endblock %}

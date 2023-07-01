@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Series;
+use App\Form\SeriesType;
 use App\Repository\SeriesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,8 +33,10 @@ class SeriesController extends AbstractController
     #[Route('/series/create', name: 'app_series_create', methods: ['GET'])]
     public function create(): Response
     {
+        $form = $this->createForm(SeriesType::class, new Series(''));
         return $this->render('series/form.html.twig', [
             'title' => 'New serie',
+            'form' => $form,
             'btn_text' => 'Create',
         ]);
     }
@@ -41,9 +44,8 @@ class SeriesController extends AbstractController
     #[Route('/series/create', name: 'app_series_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
-        $name = $request->request->get('name');
-        $serie = new Series($name);
-
+        $serie = new Series('');
+        $this->createForm(SeriesType::class, $serie)->handleRequest($request);
         $this->addFlash('success', 'Serie created with success');
 
         $this->seriesRepository->save($serie, true);
@@ -53,12 +55,14 @@ class SeriesController extends AbstractController
     #[Route('/series/edit/{serie}', name: 'app_series_edit', methods: ['GET'])]
     public function edit(Series $serie): Response
     {
+        $form = $this->createForm(SeriesType::class, new Series($serie->getName()));
         return $this->render('series/form.html.twig', [
             'title' => 'Edit serie',
-            'btn_text' => 'Update',
+            'form' => $form,
             'serie' => $serie
         ]);
     }
+
     #[Route('/series/edit/{serie}', name: 'app_series_update', methods: ['PUT'])]
     public function update(Series $serie, Request $request): Response
     {
