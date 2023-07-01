@@ -34,22 +34,7 @@
         <i class="fa-solid fa-angle-left"></i> Back
     </a>
 
-    {{ form(form) }}
-
-
-    {#<form action="{{ serie is defined ? path('app_series_update', {serie: serie.id}) : path('app_series_store') }}"
-          method="post">
-        {% if serie is defined %}
-            <input type="hidden" name="_method" value="PUT">
-        {% endif %}
-
-        <div class="form-control">
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" value="{{ serie is defined ? serie.name : '' }}">
-        </div>
-
-        <button class="btn btn-input mt">
-            {{ btn_text }}
-        </button>
-    </form>#}
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+    {{ form_end(form) }}
 {% endblock %}

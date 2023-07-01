@@ -14,14 +14,15 @@ class SeriesType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('create', SubmitType::class)
-        ;
+            ->add('save', SubmitType::class, ['label' => $options['is_update'] ? 'Update' : 'Create'])
+            ->setMethod($options['is_update'] ? 'PUT' : 'POST');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Series::class,
+            'is_update' => false
         ]);
     }
 }
