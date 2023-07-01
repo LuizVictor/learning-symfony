@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .form-control label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-control input {
+            width: 100%;
+            padding: 8px 5px;
+            border-radius: 5px;
+            border: 1px solid var(--primary-dark);
+        }
+
+        .form-control input:focus-visible {
+            outline: none;
+            border: 1px solid var(--thirdy-dark);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h1 class="title">{{ title }}</h1>
+
+    <a href="{{ path('app_series') }}" class="btn btn-link mb">
+        <i class="fa-solid fa-angle-left"></i> Back
+    </a>
+
+    <form action="{{ serie is defined ? path('app_series_update', {serie: serie.id}) : path('app_series_store') }}"
+          method="post">
+        {% if serie is defined %}
+            <input type="hidden" name="_method" value="PUT">
+        {% endif %}
+
+        <div class="form-control">
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name" value="{{ serie is defined ? serie.name : '' }}">
+        </div>
+
+        <button class="btn btn-input mt">
+            {{ btn_text }}
+        </button>
+    </form>
+{% endblock %}

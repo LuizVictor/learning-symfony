@@ -72,6 +72,9 @@
             <li>
                 {{ series.name }}
                 <div class="btn-group">
+                    <a href="{{ path('app_series_edit', {serie: series.id}) }}" class="btn btn-link">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </a>
                     <form action="{{ path('app_series_destroy', {id: series.id}) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE">
 
