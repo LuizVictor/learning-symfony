@@ -31,14 +31,14 @@
     </div>
 
     <ul class="list-group">
-        {% for seasons in seasonList %}
+        {% for season in seasonList %}
             <li>
-                <div class="info">
-                    Season {{ seasons.number }} <span class="badge">{{ seasons.episodes|length }}</span>
-                </div>
+                <a href="{{ path('app_episode', {season: season.id}) }}" class="info">
+                    Season {{ season.number }} <span class="badge">{{ season.episodes|length }}</span>
+                </a>
 
                 <div class="btn-group">
-                    <form action="{{ path('app_series_destroy', {id: seasons.id}) }}" method="post">
+                    <form action="{{ path('app_series_destroy', {id: season.id}) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE">
 
                         <button class="btn btn-input">
