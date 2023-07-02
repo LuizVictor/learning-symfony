@@ -34,7 +34,10 @@
         {% for season in seasonList %}
             <li>
                 <a href="{{ path('app_episode', {season: season.id}) }}" class="info">
-                    Season {{ season.number }} <span class="badge">{{ season.episodes|length }}</span>
+                    Season {{ season.number }}
+                    <span class="badge">
+                        {{ season.watchedEpisodes|length }} / {{ season.episodes|length }}
+                    </span>
                 </a>
 
                 <div class="btn-group">

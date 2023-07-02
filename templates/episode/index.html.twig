@@ -21,7 +21,12 @@
                     {{ episode.number }}
                     <div class="form-group">
                         <label for="watched_{{ episode.id }}">watched</label>
-                        <input type="checkbox" name="episode[{{ episode.id }}]" id="watched_{{ episode.id }}">
+                        <input
+                                type="checkbox"
+                                name="episode[{{ episode.id }}]"
+                                id="watched_{{ episode.id }}"
+                                {% if episode.watched %} checked {% endif %}
+                        >
                     </div>
                 </li>
             {% endfor %}
