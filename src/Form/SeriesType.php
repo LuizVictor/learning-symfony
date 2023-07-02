@@ -2,8 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Series;
+use App\Dto\SeriesCreateDto;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,6 +15,8 @@ class SeriesType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('seasons', type: IntegerType::class)
+            ->add('episodesPerSeason', type: IntegerType::class, options: ['label' => 'Episodes per season'])
             ->add('save', SubmitType::class, ['label' => $options['is_update'] ? 'Update' : 'Create'])
             ->setMethod($options['is_update'] ? 'PUT' : 'POST');
     }
@@ -21,7 +24,7 @@ class SeriesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Series::class,
+            'data_class' => SeriesCreateDto::class,
             'is_update' => false
         ]);
     }
