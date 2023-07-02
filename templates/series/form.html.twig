@@ -27,14 +27,11 @@
 {% endblock %}
 
 {% block body %}
-    <h1 class="title">{{ title }}</h1>
-
-
     <a href="{{ path('app_series') }}" class="btn btn-link mb">
         <i class="fa-solid fa-angle-left"></i> Back
     </a>
 
     {{ form_start(form) }}
-        {{ form_row(form.name) }}
+    {{ form_row(form.name) }}
     {{ form_end(form) }}
 {% endblock %}
