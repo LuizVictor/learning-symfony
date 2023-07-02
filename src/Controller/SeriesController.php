@@ -59,7 +59,7 @@ class SeriesController extends AbstractController
 
         $series = new Series($input->name);
         $this->addSeasons($input, $series);
-        
+
         $this->addFlash('success', 'Series created with success');
 
         $this->seriesRepository->save($series, true);
