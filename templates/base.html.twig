@@ -15,8 +15,8 @@
             margin: 0;
             padding: 0;
             font-size: 1rem;
-            font-family: 'Roboto', sans-serif;
-            color: var(--secondary-dark);
+            font-family: 'Roboto', sans-serif
+
         }
 
         :root {
@@ -26,6 +26,10 @@
             --secondary-dark: #333539;
             --thirdy-dark: #4D585F;
             --fourth-darl: #677E84;
+        }
+
+        body {
+            color: var(--secondary-dark);
         }
 
         .container {
@@ -108,11 +112,13 @@
         }
 
         .alert.alert-success {
+            color: #539b84;
             border-color: #C4D7D1;
             background-color: #F1FDF5;
         }
 
         .alert.alert-danger {
+            color: #8f103a;
             border-color: #D8C9CE;
             background-color: #FBF0F0;
         }
@@ -120,6 +126,24 @@
         .list-group {
             border-radius: 3px;
             border: 1px solid var(--secondary-light);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        form input {
+            width: 100%;
+            padding: 8px 5px;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--primary-dark);
+        }
+
+        form input:focus-visible {
+            outline: none;
+            border: 1px solid var(--thirdy-dark);
         }
 
         .list-group li {

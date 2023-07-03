@@ -4,28 +4,6 @@
     {{ title }}
 {% endblock %}
 
-{% block stylesheets %}
-    <style>
-        form label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        form input {
-            width: 100%;
-            padding: 8px 5px;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            border: 1px solid var(--primary-dark);
-        }
-
-        form input:focus-visible {
-            outline: none;
-            border: 1px solid var(--thirdy-dark);
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
     <a href="{{ path('app_series') }}" class="btn btn-link mb">
         <i class="fa-solid fa-angle-left"></i> Back
