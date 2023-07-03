@@ -6,7 +6,7 @@ use App\Dto\SeriesCreateDto;
 use App\Entity\Episode;
 use App\Entity\Season;
 use App\Entity\Series;
-use App\Form\SeriesType;
+use App\Form\SeriesCreateType;
 use App\Repository\SeriesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -37,7 +37,7 @@ class SeriesController extends AbstractController
     public function create(): Response
     {
         $dto = new SeriesCreateDto('', 0, 0);
-        $form = $this->createForm(SeriesType::class, $dto);
+        $form = $this->createForm(SeriesCreateType::class, $dto);
         return $this->render('series/form.html.twig', [
             'title' => 'New series',
             'form' => $form,
@@ -49,7 +49,7 @@ class SeriesController extends AbstractController
     public function store(Request $request): Response
     {
         $input = new SeriesCreateDto('', 0, 0);
-        $form = $this->createForm(SeriesType::class, $input)->handleRequest($request);
+        $form = $this->createForm(SeriesCreateType::class, $input)->handleRequest($request);
         if (!$form->isValid()) {
             return $this->render('series/form.html.twig', [
                 'title' => 'New series',
@@ -69,18 +69,16 @@ class SeriesController extends AbstractController
     #[Route('/series/edit/{series}', name: 'app_series_edit', methods: ['GET'])]
     public function edit(Series $series): Response
     {
-        $form = $this->createForm(SeriesType::class, $series, ['is_update' => true]);
         return $this->render('series/form.html.twig', [
             'title' => 'Edit series',
-            'form' => $form,
-            'series' => 'series'
+            'series' => $series
         ]);
     }
 
     #[Route('/series/edit/{series}', name: 'app_series_update', methods: ['PUT'])]
     public function update(Series $series, Request $request): Response
     {
-        $name = $request->request->all('series')['name'];
+        $name = $request->request->get('name');
         $this->seriesRepository->update($series, $name);
         $this->addFlash('success', 'Series updated with success');
 

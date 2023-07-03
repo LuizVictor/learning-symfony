@@ -10,8 +10,19 @@
     </a>
 
     <div class="form">
-        {{ form_start(form) }}
-        {{ form_row(form.name) }}
-        {{ form_end(form) }}
+        {% if app.request.pathinfo == path('app_series_create') %}
+            {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_end(form) }}
+        {% else %}
+            <form action="{{ path('app_series_update', {series: series.id}) }}" method="post">
+                <input type="hidden" name="_method" value="PUT">
+
+                <label for="series_create_name">Name:</label>
+                <input type="text" id="series_create_name" name="name" value="{{ series.name }}">
+
+                <button type="submit" name="update">Update</button>
+            </form>
+        {% endif %}
     </div>
 {% endblock %}
