@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Dto\SeriesCreateDto;
+use App\Entity\Episode;
+use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SeriesType;
 use App\Repository\SeriesRepository;
@@ -33,7 +36,8 @@ class SeriesController extends AbstractController
     #[Route('/series/create', name: 'app_series_create', methods: ['GET'])]
     public function create(): Response
     {
-        $form = $this->createForm(SeriesType::class, new Series(''));
+        $dto = new SeriesCreateDto('', 0, 0);
+        $form = $this->createForm(SeriesType::class, $dto);
         return $this->render('series/form.html.twig', [
             'title' => 'New series',
             'form' => $form,
@@ -44,14 +48,18 @@ class SeriesController extends AbstractController
     #[Route('/series/create', name: 'app_series_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
-        $series = new Series('');
-        $form = $this->createForm(SeriesType::class, $series)->handleRequest($request);
+        $input = new SeriesCreateDto('', 0, 0);
+        $form = $this->createForm(SeriesType::class, $input)->handleRequest($request);
         if (!$form->isValid()) {
             return $this->render('series/form.html.twig', [
                 'title' => 'New series',
                 'form' => $form
             ]);
         }
+
+        $series = new Series($input->name);
+        $this->addSeasons($input, $series);
+
         $this->addFlash('success', 'Series created with success');
 
         $this->seriesRepository->save($series, true);
@@ -87,5 +95,21 @@ class SeriesController extends AbstractController
         $this->addFlash('success', 'Series removed with success');
 
         return new RedirectResponse('/series');
+    }
+
+    private function addSeasons(SeriesCreateDto $input, Series $series): void
+    {
+        for ($i = 1; $i <= $input->seasons; $i++) {
+            $season = new Season($i);
+            $this->addEpisodes($input, $season);
+            $series->addSeason($season);
+        }
+    }
+
+    private function addEpisodes(SeriesCreateDto $input, Season $season): void
+    {
+        for ($i = 1; $i <= $input->episodesPerSeason; $i++) {
+            $season->addEpisode(new Episode($i));
+        }
     }
 }

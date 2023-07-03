@@ -4,73 +4,18 @@
     Series
 {% endblock %}
 
-{% block stylesheets %}
-    <style>
-        .list-group {
-            border-radius: 3px;
-            border: 1px solid var(--secondary-light);
-        }
-
-        .list-group li {
-            width: 100%;
-            padding: 10px;
-            align-items: center;
-            display: inline-flex;
-            justify-content: space-between;
-        }
-
-        .list-group li:not(:last-child) {
-            border-bottom: 1px solid var(--secondary-light);
-        }
-
-        .btn-group {
-            display: flex;
-        }
-
-        .btn-group a {
-            margin: 0 5px;
-        }
-
-        .alert {
-            padding: 10px;
-            display: block;
-            margin: 10px 0;
-            border: 1px solid;
-            border-radius: 5px;
-        }
-
-        .alert.alert-success {
-            border-color: #C4D7D1;
-            background-color: #F1FDF5;
-        }
-
-        .alert.alert-danger {
-            border-color: #D8C9CE;
-            background-color: #FBF0F0;
-        }
-
-    </style>
-{% endblock %}
-
 {% block body %}
-    <h1 class="title">Series</h1>
-
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     <a href="{{ path('app_series_create') }}" class="btn btn-link mb">
-        new <i class="fa-solid fa-plus"></i>
+        New <i class="fa-solid fa-plus"></i>
     </a>
 
     <ul class="list-group">
         {% for series in seriesList %}
             <li>
-                {{ series.name }}
+                <a href="{{ path('app_season', {series: series.id}) }}">
+                    {{ series.name }}
+                </a>
+
                 <div class="btn-group">
                     <a href="{{ path('app_series_edit', {series: series.id}) }}" class="btn btn-link">
                         <i class="fa-regular fa-pen-to-square"></i>

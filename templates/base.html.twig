@@ -9,7 +9,6 @@
     <script src="https://kit.fontawesome.com/3cd616181c.js" crossorigin="anonymous"></script>
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
         * {
             box-sizing: border-box;
@@ -30,10 +29,17 @@
         }
 
         .container {
-            max-width: 1320px;
             width: 100%;
-            margin-right: auto;
-            margin-left: auto;
+            margin: 1.5rem auto 0;
+            max-width: 1320px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--thirdy-dark);
         }
 
         .mt {
@@ -84,6 +90,49 @@
         button:hover {
             background-color: var(--fourth-darl);
         }
+
+        .btn-group {
+            display: flex;
+        }
+
+        .btn-group a {
+            margin: 0 5px;
+        }
+
+        .alert {
+            padding: 10px;
+            display: block;
+            margin: 10px 0;
+            border: 1px solid;
+            border-radius: 5px;
+        }
+
+        .alert.alert-success {
+            border-color: #C4D7D1;
+            background-color: #F1FDF5;
+        }
+
+        .alert.alert-danger {
+            border-color: #D8C9CE;
+            background-color: #FBF0F0;
+        }
+
+        .list-group {
+            border-radius: 3px;
+            border: 1px solid var(--secondary-light);
+        }
+
+        .list-group li {
+            width: 100%;
+            padding: 10px;
+            align-items: center;
+            display: inline-flex;
+            justify-content: space-between;
+        }
+
+        .list-group li:not(:last-child) {
+            border-bottom: 1px solid var(--secondary-light);
+        }
     </style>
 
     {% block stylesheets %}
@@ -94,6 +143,18 @@
 </head>
 <body>
 <div class="container mx-auto">
+    <h1 class="title">
+        {{ block('title') }}
+    </h1>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     {% block body %}{% endblock %}
 </div>
 </body>

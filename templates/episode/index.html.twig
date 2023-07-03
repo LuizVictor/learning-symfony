@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ series.name }} season {{ season.number }} episodes
+{% endblock %}
+
+{% block body %}
+    <div class="btn-group mb">
+        <a href="{{ path('app_season', {'series': series.id}) }}" class="btn btn-link">
+            <i class="fa-solid fa-angle-left"></i> Back
+        </a>
+        <a href="{{ path('app_series_create') }}" class="btn btn-link ">
+            New episode <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+
+    <form method="post">
+        <ul class="list-group">
+            {% for episode in episodes %}
+                <li>
+                    {{ episode.number }}
+                    <div class="form-group">
+                        <label for="watched_{{ episode.id }}">watched</label>
+                        <input
+                                type="checkbox"
+                                name="episode[{{ episode.id }}]"
+                                id="watched_{{ episode.id }}"
+                                {% if episode.watched %} checked {% endif %}
+                        >
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <button class="mt">Save</button>
+    </form>
+{% endblock %}

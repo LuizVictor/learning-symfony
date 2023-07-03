@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ series.name }} seasons{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .info {
+            display: flex;
+            align-items: center;
+        }
+
+        .badge {
+            margin: 0 5px;
+            padding: 2px 6px;
+            font-size: .7rem;
+            border-radius: 5px;
+            color: var(--primary-light);
+            background-color: var(--secondary-dark);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="btn-group mb">
+        <a href="{{ path('app_series') }}" class="btn btn-link">
+            <i class="fa-solid fa-angle-left"></i> Back
+        </a>
+        <a href="{{ path('app_series_create') }}" class="btn btn-link ">
+            New season <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+
+    <ul class="list-group">
+        {% for season in seasonList %}
+            <li>
+                <a href="{{ path('app_episode', {season: season.id}) }}" class="info">
+                    Season {{ season.number }}
+                    <span class="badge">
+                        {{ season.watchedEpisodes|length }} / {{ season.episodes|length }}
+                    </span>
+                </a>
+
+                <div class="btn-group">
+                    <form action="{{ path('app_series_destroy', {id: season.id}) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE">
+
+                        <button class="btn btn-input">
+                            <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
