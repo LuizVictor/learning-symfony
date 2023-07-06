@@ -7,21 +7,25 @@ use App\Entity\Episode;
 use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SeriesCreateType;
+use App\Message\SeriesWasCreated;
 use App\Repository\SeriesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SeriesController extends AbstractController
 {
     private SeriesRepository $seriesRepository;
+    private MessageBusInterface $messageBus;
 
-    public function __construct(SeriesRepository $seriesRepository)
+    public function __construct(SeriesRepository $seriesRepository, MessageBusInterface $messageBus)
     {
         $this->seriesRepository = $seriesRepository;
+        $this->messageBus = $messageBus;
     }
 
     #[Route('/series', name: 'app_series', methods: ['GET'])]
@@ -61,7 +65,8 @@ class SeriesController extends AbstractController
 
         $series = new Series($input->name);
         $this->addSeasons($input, $series);
-        
+        $this->messageBus->dispatch(new SeriesWasCreated($series));
+
         $this->addFlash('success', 'Series created with success');
 
         $this->seriesRepository->save($series, true);
