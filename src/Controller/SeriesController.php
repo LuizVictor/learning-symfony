@@ -10,22 +10,30 @@ use App\Form\SeriesCreateType;
 use App\Message\SeriesWasCreated;
 use App\Repository\SeriesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class SeriesController extends AbstractController
 {
     private SeriesRepository $seriesRepository;
     private MessageBusInterface $messageBus;
+    private SluggerInterface $slugger;
 
-    public function __construct(SeriesRepository $seriesRepository, MessageBusInterface $messageBus)
+    public function __construct(
+        SeriesRepository    $seriesRepository,
+        MessageBusInterface $messageBus,
+        SluggerInterface    $slugger
+    )
     {
         $this->seriesRepository = $seriesRepository;
         $this->messageBus = $messageBus;
+        $this->slugger = $slugger;
     }
 
     #[Route('/series', name: 'app_series', methods: ['GET'])]
@@ -56,6 +64,21 @@ class SeriesController extends AbstractController
         $input = new SeriesCreateDto();
         $form = $this->createForm(SeriesCreateType::class, $input)->handleRequest($request);
 
+        /** @var UploadedFile $uploadedCoverImage */
+        $uploadedCoverImage = $form->get('coverImage')->getData();
+
+        if ($uploadedCoverImage) {
+            $originalFilename = pathinfo($uploadedCoverImage->getClientOriginalName(), PATHINFO_FILENAME);
+            // this is needed to safely include the file name as part of the URL
+            $safeFilename = $this->slugger->slug($originalFilename);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $uploadedCoverImage->guessExtension();
+
+            $uploadedCoverImage->move(
+                $this->getParameter('cover_image_directory'),
+                $newFilename
+            );
+        }
+
         if (!$form->isValid()) {
             return $this->render('series/form.html.twig', [
                 'title' => 'New series',
@@ -63,7 +86,7 @@ class SeriesController extends AbstractController
             ]);
         }
 
-        $series = new Series($input->name);
+        $series = new Series($input->name, isset($newFilename));
         $this->addSeasons($input, $series);
         $this->messageBus->dispatch(new SeriesWasCreated($series));
 

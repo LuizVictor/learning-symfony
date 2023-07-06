@@ -27,10 +27,11 @@ class Series
     #[ORM\OneToMany(mappedBy: 'series', targetEntity: Season::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $seasons;
 
-    public function __construct(string $name)
+    public function __construct(string $name, ?string $coverImagePath = null)
     {
         $this->name = $name;
         $this->seasons = new ArrayCollection();
+        $this->coverImagePath = $coverImagePath;
     }
 
     public function getId(): ?int

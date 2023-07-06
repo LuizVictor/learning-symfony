@@ -13,9 +13,9 @@ class SeriesCreateDto
     public int $seasons;
     #[Assert\Positive]
     public int $episodesPerSeason;
-    public string $coverImage;
+    public ?string $coverImage;
 
-    public function __construct(string $name = '', int $seasons = 0, int $episodesPerSeason = 0, string $coverImage = '')
+    public function __construct(string $name = '', int $seasons = 0, int $episodesPerSeason = 0, string $coverImage = null)
     {
         $this->name = $name;
         $this->seasons = $seasons;

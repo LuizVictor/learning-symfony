@@ -18,7 +18,7 @@ class SeriesCreateType extends AbstractType
             ->add('name')
             ->add('seasons', type: IntegerType::class)
             ->add('episodesPerSeason', type: IntegerType::class, options: ['label' => 'Episodes per season'])
-            ->add('coverImage', FileType::class)
+            ->add('coverImage', FileType::class, ['mapped' => false])
             ->add('save', SubmitType::class, ['label' => $options['is_update'] ? 'Update' : 'Create'])
             ->setMethod($options['is_update'] ? 'PUT' : 'POST');
     }
