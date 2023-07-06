@@ -8,24 +8,20 @@ use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SeriesCreateType;
 use App\Repository\SeriesRepository;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SeriesController extends AbstractController
 {
     private SeriesRepository $seriesRepository;
-    private MailerInterface $mailer;
 
-    public function __construct(SeriesRepository $seriesRepository, MailerInterface $mailer)
+    public function __construct(SeriesRepository $seriesRepository)
     {
         $this->seriesRepository = $seriesRepository;
-        $this->mailer = $mailer;
     }
 
     #[Route('/series', name: 'app_series', methods: ['GET'])]
@@ -65,19 +61,7 @@ class SeriesController extends AbstractController
 
         $series = new Series($input->name);
         $this->addSeasons($input, $series);
-
-        $user = $this->getUser();
-
-        $email = (new TemplatedEmail())
-            ->from('hello@example.com')
-            ->to($user->getUserIdentifier())
-            ->subject('New Series created')
-            ->text("Series {$series->getName()} created!")
-            ->htmlTemplate("emails/series-created.html.twig")
-            ->context(compact('series'));
-
-        $this->mailer->send($email);
-
+        
         $this->addFlash('success', 'Series created with success');
 
         $this->seriesRepository->save($series, true);
