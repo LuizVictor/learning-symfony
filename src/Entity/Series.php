@@ -6,6 +6,7 @@ use App\Repository\SeriesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SeriesRepository::class)]
@@ -18,9 +19,10 @@ class Series
     private int $id;
 
     #[ORM\Column]
-    #[Assert\NotBlank]
-    #[Assert\Length(min: 5)]
     private string $name;
+
+    #[ORM\Column]
+    private ?string $coverImagePath;
 
     #[ORM\OneToMany(mappedBy: 'series', targetEntity: Season::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $seasons;
@@ -74,6 +76,17 @@ class Series
             }
         }
 
+        return $this;
+    }
+
+    public function getCoverImagePath(): ?string
+    {
+        return $this->coverImagePath;
+    }
+
+    public function setCoverImagePath(string $coverImagePath): self
+    {
+        $this->coverImagePath = $coverImagPath;
         return $this;
     }
 }

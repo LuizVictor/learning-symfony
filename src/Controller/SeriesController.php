@@ -53,7 +53,7 @@ class SeriesController extends AbstractController
     #[Route('/series/create', name: 'app_series_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
-        $input = new SeriesCreateDto('', 0, 0);
+        $input = new SeriesCreateDto();
         $form = $this->createForm(SeriesCreateType::class, $input)->handleRequest($request);
 
         if (!$form->isValid()) {
