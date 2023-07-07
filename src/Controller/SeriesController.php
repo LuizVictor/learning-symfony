@@ -64,6 +64,13 @@ class SeriesController extends AbstractController
         $input = new SeriesCreateDto();
         $form = $this->createForm(SeriesCreateType::class, $input)->handleRequest($request);
 
+        if (!$form->isValid()) {
+            return $this->render('series/form.html.twig', [
+                'title' => 'New series',
+                'form' => $form
+            ]);
+        }
+
         /** @var UploadedFile $uploadedCoverImage */
         $uploadedCoverImage = $form->get('coverImage')->getData();
 
@@ -79,14 +86,7 @@ class SeriesController extends AbstractController
             );
         }
 
-        if (!$form->isValid()) {
-            return $this->render('series/form.html.twig', [
-                'title' => 'New series',
-                'form' => $form
-            ]);
-        }
-
-        $series = new Series($input->name, isset($newFilename));
+        $series = new Series($input->name, $newFilename ?? null);
         $this->addSeasons($input, $series);
         $this->messageBus->dispatch(new SeriesWasCreated($series));
 

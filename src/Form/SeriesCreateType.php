@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class SeriesCreateType extends AbstractType
 {
@@ -18,7 +19,13 @@ class SeriesCreateType extends AbstractType
             ->add('name')
             ->add('seasons', type: IntegerType::class)
             ->add('episodesPerSeason', type: IntegerType::class, options: ['label' => 'Episodes per season'])
-            ->add('coverImage', FileType::class, ['mapped' => false])
+            ->add('coverImage', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File(mimeTypes: 'image/*')
+                ]
+            ])
             ->add('save', SubmitType::class, ['label' => $options['is_update'] ? 'Update' : 'Create'])
             ->setMethod($options['is_update'] ? 'PUT' : 'POST');
     }
