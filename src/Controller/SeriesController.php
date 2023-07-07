@@ -8,6 +8,7 @@ use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SeriesCreateType;
 use App\Message\SeriesWasCreated;
+use App\Message\SeriesWasDeleted;
 use App\Repository\SeriesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -118,8 +119,9 @@ class SeriesController extends AbstractController
     #[Route('/series/destroy/{id}', name: 'app_series_destroy', methods: ['DELETE'])]
     public function destroy(int $id): Response
     {
-        $series = $this->seriesRepository->findByIdPartial($id);
+        $series = $this->seriesRepository->findById($id);
         $this->seriesRepository->remove($series, true);
+        $this->messageBus->dispatch(new SeriesWasDeleted($series));
         $this->addFlash('success', 'Series removed with success');
 
         return new RedirectResponse('/series');
