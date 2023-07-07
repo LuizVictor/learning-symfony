@@ -30,6 +30,8 @@
         </a>
     </div>
 
+    <img src="{{ asset('uploads/covers/') ~ series.coverImagePath }}" alt="{{ series.name }} series cover image">
+
     <ul class="list-group">
         {% for season in seasonList %}
             <li>

@@ -4,7 +4,7 @@ namespace App\Message;
 
 use App\Entity\Series;
 
-class SeriesWasCreated
+class SeriesWasDeleted
 {
     public readonly Series $series;
 
@@ -12,4 +12,6 @@ class SeriesWasCreated
     {
         $this->series = $series;
     }
+
+
 }

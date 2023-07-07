@@ -8,24 +8,33 @@ use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SeriesCreateType;
 use App\Message\SeriesWasCreated;
+use App\Message\SeriesWasDeleted;
 use App\Repository\SeriesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class SeriesController extends AbstractController
 {
     private SeriesRepository $seriesRepository;
     private MessageBusInterface $messageBus;
+    private SluggerInterface $slugger;
 
-    public function __construct(SeriesRepository $seriesRepository, MessageBusInterface $messageBus)
+    public function __construct(
+        SeriesRepository    $seriesRepository,
+        MessageBusInterface $messageBus,
+        SluggerInterface    $slugger
+    )
     {
         $this->seriesRepository = $seriesRepository;
         $this->messageBus = $messageBus;
+        $this->slugger = $slugger;
     }
 
     #[Route('/series', name: 'app_series', methods: ['GET'])]
@@ -53,7 +62,7 @@ class SeriesController extends AbstractController
     #[Route('/series/create', name: 'app_series_store', methods: ['POST'])]
     public function store(Request $request): Response
     {
-        $input = new SeriesCreateDto('', 0, 0);
+        $input = new SeriesCreateDto();
         $form = $this->createForm(SeriesCreateType::class, $input)->handleRequest($request);
 
         if (!$form->isValid()) {
@@ -63,7 +72,22 @@ class SeriesController extends AbstractController
             ]);
         }
 
-        $series = new Series($input->name);
+        /** @var UploadedFile $uploadedCoverImage */
+        $uploadedCoverImage = $form->get('coverImage')->getData();
+
+        if ($uploadedCoverImage) {
+            $originalFilename = pathinfo($uploadedCoverImage->getClientOriginalName(), PATHINFO_FILENAME);
+            // this is needed to safely include the file name as part of the URL
+            $safeFilename = $this->slugger->slug($originalFilename);
+            $newFilename = $safeFilename . '-' . uniqid() . '.' . $uploadedCoverImage->guessExtension();
+
+            $uploadedCoverImage->move(
+                $this->getParameter('cover_image_directory'),
+                $newFilename
+            );
+        }
+
+        $series = new Series($input->name, $newFilename ?? null);
         $this->addSeasons($input, $series);
         $this->messageBus->dispatch(new SeriesWasCreated($series));
 
@@ -95,8 +119,9 @@ class SeriesController extends AbstractController
     #[Route('/series/destroy/{id}', name: 'app_series_destroy', methods: ['DELETE'])]
     public function destroy(int $id): Response
     {
-        $series = $this->seriesRepository->findByIdPartial($id);
+        $series = $this->seriesRepository->findById($id);
         $this->seriesRepository->remove($series, true);
+        $this->messageBus->dispatch(new SeriesWasDeleted($series));
         $this->addFlash('success', 'Series removed with success');
 
         return new RedirectResponse('/series');
